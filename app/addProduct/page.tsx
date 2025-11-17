@@ -3,7 +3,7 @@ import { useState } from "react";
 
 type NewProduct = {
   title: string;
-  price: number;
+  price: string | number;
   description: string;
   image: string;
   category: string;
@@ -12,7 +12,7 @@ type NewProduct = {
 export default function AddProductForm() {
   const [formData, setFormData] = useState<NewProduct>({
     title: "",
-    price: 0,
+    price: "",
     description: "",
     image: "",
     category: ""
@@ -37,7 +37,7 @@ export default function AddProductForm() {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === "price" ? parseFloat(value) || 0 : value
+      [name]: name === "price" ? value : value
     }));
   };
 
@@ -114,7 +114,8 @@ export default function AddProductForm() {
       setMessageType("error");
       return false;
     }
-    if (formData.price <= 0) {
+    const priceNum = parseFloat(formData.price.toString());
+    if (!priceNum || priceNum <= 0) {
       setMessage("Price must be greater than 0");
       setMessageType("error");
       return false;
@@ -147,12 +148,18 @@ export default function AddProductForm() {
     setMessageType("");
 
     try {
+      // Convert price to number for API submission
+      const productData = {
+        ...formData,
+        price: parseFloat(formData.price.toString())
+      };
+      
       const response = await fetch("https://fakestoreapi.com/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(productData),
       });
 
       if (response.ok) {
@@ -162,7 +169,7 @@ export default function AddProductForm() {
         
         setFormData({
           title: "",
-          price: 0,
+          price: "",
           description: "",
           image: "",
           category: ""
@@ -296,6 +303,18 @@ export default function AddProductForm() {
             Select an image file (JPG, PNG, GIF, etc.)
           </p>
         </div>
+        {/* Image Preview */}
+{formData.image && (
+  <div className="mt-4">
+    <p className="text-sm text-gray-700 mb-2">Image Preview:</p>
+    <img
+      src={formData.image}
+      alt="Product preview"
+      className="max-h-48 rounded-md border border-gray-200"
+    />
+  </div>
+)}
+
 
         {/* Description */}
         <div className="mb-6">
