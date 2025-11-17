@@ -50,7 +50,7 @@ type Product = {
         {products.map((product) => (
           <div 
             key={product.id} 
-            className="bg-white rounded-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
+            className="bg-white rounded-lg shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
           >
             {/* Product Image */}
             <div className="relative h-48 bg-gray-100">
@@ -65,13 +65,13 @@ type Product = {
             <div className="p-4">
                 {/* Category */}
               <div className="mb-2">
-                <span className=" bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full capitalize">
+                <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full capitalize">
                   {product.category || "Uncategorized"}
                 </span>
               </div>
               
               {/* Title */}
-              <h3 className="font-semibold text-gray-800 mb-4 h-15 overflow-hidden text-sm">
+              <h3 className="font-semibold text-gray-800 mb-4 h-12 overflow-hidden text-sm line-clamp-2">
                 {product.title}
               </h3>
               
